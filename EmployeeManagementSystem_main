@@ -1,0 +1,67 @@
+public class EmployeeManagementSystem {
+    public static void main(String[] args) {
+        EmployeeService service = new EmployeeService();
+        EmployeeView view = new EmployeeView();
+
+        int choice;
+        do {
+            choice = view.showMenu();
+
+            switch (choice) {
+                case 1:
+                    Employee emp = view.getEmployeeDetails();
+                    service.addEmployee(emp);
+                    view.displayMessage("Employee added successfully!");
+                    break;
+
+                case 2:
+                    if (service.getAllEmployees().isEmpty()) {
+                        view.displayMessage("No employees to display.");
+                    } else {
+                        view.displayMessage("Employee List:");
+                        for (Employee e : service.getAllEmployees()) {
+                            view.displayEmployee(e);
+                        }
+                    }
+                    break;
+
+                case 3:
+                    int searchId = view.getEmployeeId();
+                    Employee foundEmp = service.searchEmployee(searchId);
+                    view.displayEmployee(foundEmp);
+                    break;
+
+                case 4:
+                    int updateId = view.getEmployeeId();
+                    String newName = view.getUpdatedName();
+                    String newDept = view.getUpdatedDepartment();
+                    double newSalary = view.getUpdatedSalary();
+                    boolean updated = service.updateEmployee(updateId, newName, newDept, newSalary);
+                    if (updated) {
+                        view.displayMessage("Employee updated successfully!");
+                    } else {
+                        view.displayMessage("Employee not found.");
+                    }
+                    break;
+
+                case 5:
+                    int deleteId = view.getEmployeeId();
+                    boolean deleted = service.deleteEmployee(deleteId);
+                    if (deleted) {
+                        view.displayMessage("Employee deleted successfully!");
+                    } else {
+                        view.displayMessage("Employee not found.");
+                    }
+                    break;
+
+                case 6:
+                    view.displayMessage("Exiting... Thank you!");
+                    break;
+
+                default:
+                    view.displayMessage("Invalid choice! Try again.");
+            }
+
+        } while (choice != 6);
+    }
+}
